@@ -1,44 +1,14 @@
 /* Day 1, part 2 = 195292 */
 
-#include <stdio.h>
-#include <string.h>
+#include "elfs.h"
 
 int main() {
-    FILE *inputFile = fopen("input.txt", "r");
+    int *elfCalories = readElfCalories();
 
-    if (inputFile) {
-        char line[8];
-        int elfCalories = 0;
-        int calories = 0;
-        int maxCalories[] = { 0, 0, 0 };
+    if (elfCalories) {
+        printf("%d", elfCalories[0] + elfCalories[1] + elfCalories[2]);
 
-        while (fgets(line, sizeof(line), inputFile)) {
-            if (strlen(line) == 1) {
-                for (int i = 0; i < 3; i++) {
-                    if (elfCalories > maxCalories[i]) {
-                        maxCalories[i] = elfCalories;
-                        break;
-                    }
-                }
-
-                elfCalories = 0;
-            } else {
-                sscanf(line, "%d", &calories);
-
-                elfCalories += calories;
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            if (elfCalories > maxCalories[i]) {
-                maxCalories[i] = elfCalories;
-                break;
-            }
-        }
-
-        fclose(inputFile);
-
-        printf("%d", maxCalories[0] + maxCalories[1] + maxCalories[2]);
+        free(elfCalories);
     }
 
     return 0;
