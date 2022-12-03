@@ -9,22 +9,22 @@ int main() {
 
     if (inputFile) {
         char rucksack[64];
-        char pocket1[32];
-        char pocket2[32];
+        char compartment1[32];
+        char compartment2[32];
         char *item;
         int prioritySum = 0;
 
         while (fgets(rucksack, sizeof(rucksack), inputFile)) {
-            int pocketSize = strlen(rucksack) / 2;
-            *pocket1 = *pocket2 = '\0';
+            int compartmentSize = strlen(rucksack) / 2;
+            *compartment1 = *compartment2 = '\0';
 
-            strncat(pocket1, rucksack, pocketSize);
-            strncat(pocket2, rucksack + pocketSize, pocketSize);
+            strncat(compartment1, rucksack, compartmentSize);
+            strncat(compartment2, rucksack + compartmentSize, compartmentSize);
 
-            item = pocket1;
+            item = compartment1;
 
             while (item) {
-                if (strchr(pocket2, *item)) {
+                if (strchr(compartment2, *item)) {
                     prioritySum += priority(*item);
                     break;
                 }
