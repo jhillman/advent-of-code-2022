@@ -12,19 +12,21 @@ int *readElfCalories() {
     if (inputFile) {
         char line[8];
         int calories = 0;
-        int elfCapacity = 10;
+        int elfCapacity = 50;
         int elfIndex = 0;
         int *elfCalories = (int *)malloc(elfCapacity * sizeof(int));
 
         while (fgets(line, sizeof(line), inputFile)) {
             if (elfIndex == elfCapacity) {
-                elfCapacity += 10;
+                elfCapacity += 50;
 
                 elfCalories = (int *)realloc(elfCalories, elfCapacity * sizeof(int));
             }
 
             if (strlen(line) == 1) {
-                elfCalories[++elfIndex] = 0;
+                ++elfIndex;
+
+                elfCalories[elfIndex] = 0;
             } else {
                 sscanf(line, "%d", &calories);
 
