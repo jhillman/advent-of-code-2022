@@ -1,6 +1,6 @@
 /* Day 1, part 1 = 66306 */
 
-#include "elfs.h"
+#include "elves.h"
 
 int main() {
     int *elfCalories = readElfCalories();
