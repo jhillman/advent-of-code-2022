@@ -1,3 +1,3 @@
 int priority(char item) {
-	return (item - (item >= 'a' ? 'a' : 'A')) + (item >= 'a' ? 1 : 27);
+	return item >= 'a' ? item - 'a' + 1 : item - 'A' + 27;
 }
