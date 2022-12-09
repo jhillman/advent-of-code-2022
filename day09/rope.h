@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define GRID_SIZE 600
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a,b) ((a) > (b) ? (a) : (b))
 
 struct Position {
     int x;
@@ -52,18 +53,42 @@ int countTailPositions(int knotCount) {
         struct Position *rope = (struct Position *)calloc(knotCount, sizeof(struct Position));
         struct Position *tail = &rope[knotCount - 1];
 
-        bool **grid = (bool **)malloc(GRID_SIZE * sizeof(bool *));
-
-        for (int y = 0; y < GRID_SIZE; y++) {
-            grid[y] = (bool *)calloc(GRID_SIZE, sizeof(bool));
-        }
-
-        int gridOffset = GRID_SIZE / 2;
-        grid[gridOffset][gridOffset] = true;
-
         char direction;
         int distance;
         char nl;
+        int minX = 0;
+        int maxX = 0;
+        int minY = 0;
+        int maxY = 0;
+
+        while (fscanf(inputFile, "%c %d%c", &direction, &distance, &nl) >= 2) {
+            for (int i = 0; i < distance; i++) {
+                moveHead(rope, direction);
+
+                minX = min(rope->x, minX);
+                maxX = max(rope->x, maxX);
+                minY = min(rope->y, minY);
+                maxY = max(rope->y, maxY);
+            }
+        }
+
+        int gridWidth = maxX - minX + 1;
+        int gridHeight = maxY - minY + 1;
+        int gridXOffset = -minX;
+        int gridYOffset = -minY;
+
+        bool **grid = (bool **)malloc(gridHeight * sizeof(bool *));
+
+        for (int y = 0; y < gridHeight; y++) {
+            grid[y] = (bool *)calloc(gridWidth, sizeof(bool));
+        }
+
+        grid[gridYOffset][gridXOffset] = true;
+
+        rope->x = 0;
+        rope->y = 0;
+
+        fseek(inputFile, 0, SEEK_SET);
 
         while (fscanf(inputFile, "%c %d%c", &direction, &distance, &nl) >= 2) {
             for (int i = 0; i < distance; i++) {
@@ -73,7 +98,7 @@ int countTailPositions(int knotCount) {
                     moveTail(rope + j, rope + j + 1);
                 }
 
-                grid[tail->y + gridOffset][tail->x + gridOffset] = true;
+                grid[tail->y + gridYOffset][tail->x + gridXOffset] = true;
             }
         }
 
@@ -81,8 +106,8 @@ int countTailPositions(int knotCount) {
 
         int tailPositionCount = 0;
 
-        for (int y = 0; y < GRID_SIZE; y++) {
-            for (int x = 0; x < GRID_SIZE; x++) {
+        for (int y = 0; y < gridHeight; y++) {
+            for (int x = 0; x < gridWidth; x++) {
                 if (grid[y][x]) {
                     ++tailPositionCount;
                 }
