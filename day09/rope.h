@@ -88,12 +88,15 @@ int countTailPositions(int knotCount) {
 
         fseek(inputFile, 0, SEEK_SET);
 
+        struct Position *knot;
+        struct Position *nextKnot;
+
         while (fscanf(inputFile, "%c %d%c", &direction, &distance, &nl) >= 2) {
             for (int i = 0; i < distance; i++) {
                 moveHead(rope, direction, 1);
 
-                for (int knot = 0; knot < knotCount - 1; knot++) {
-                    moveTail(rope + knot, rope + knot + 1);
+                for (knot = rope, nextKnot = knot + 1; knot < tail; knot++, nextKnot++) {
+                    moveTail(knot, nextKnot);
                 }
 
                 grid[tail->y + gridYOffset][tail->x + gridXOffset] = true;
