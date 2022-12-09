@@ -10,19 +10,19 @@ struct Position {
     int y;
 };
 
-void moveHead(struct Position *head, char direction) {
+void moveHead(struct Position *head, char direction, int distance) {
     switch (direction) {
     case 'U':
-        --head->y;
+        head->y -= distance;
         break;
     case 'D':
-        ++head->y;
+        head->y += distance;
         break;
     case 'L':
-        --head->x;
+        head->x -= distance;
         break;
     case 'R':
-        ++head->x;
+        head->x += distance;
         break;
     }
 }
@@ -62,14 +62,12 @@ int countTailPositions(int knotCount) {
         int maxY = 0;
 
         while (fscanf(inputFile, "%c %d%c", &direction, &distance, &nl) >= 2) {
-            for (int i = 0; i < distance; i++) {
-                moveHead(rope, direction);
+            moveHead(rope, direction, distance);
 
-                minX = min(rope->x, minX);
-                maxX = max(rope->x, maxX);
-                minY = min(rope->y, minY);
-                maxY = max(rope->y, maxY);
-            }
+            minX = min(rope->x, minX);
+            maxX = max(rope->x, maxX);
+            minY = min(rope->y, minY);
+            maxY = max(rope->y, maxY);
         }
 
         int gridWidth = maxX - minX + 1;
@@ -92,7 +90,7 @@ int countTailPositions(int knotCount) {
 
         while (fscanf(inputFile, "%c %d%c", &direction, &distance, &nl) >= 2) {
             for (int i = 0; i < distance; i++) {
-                moveHead(rope, direction);
+                moveHead(rope, direction, 1);
 
                 for (int j = 0; j < knotCount - 1; j++) {
                     moveTail(rope + j, rope + j + 1);
