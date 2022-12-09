@@ -92,8 +92,8 @@ int countTailPositions(int knotCount) {
             for (int i = 0; i < distance; i++) {
                 moveHead(rope, direction, 1);
 
-                for (int j = 0; j < knotCount - 1; j++) {
-                    moveTail(rope + j, rope + j + 1);
+                for (int knot = 0; knot < knotCount - 1; knot++) {
+                    moveTail(rope + knot, rope + knot + 1);
                 }
 
                 grid[tail->y + gridYOffset][tail->x + gridXOffset] = true;
