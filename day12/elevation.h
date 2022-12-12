@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define MAX_STEPS 10000000
+#define MAX_STEPS 1000
 
 struct Location {
     int x;
@@ -145,12 +145,6 @@ int fewestSteps(struct ElevationData *data, struct Location start) {
     int steps = cumulativeSteps[data->end.y][data->end.x];
 
     for (int y = 0; y < data->height; y++) {
-        // for (int x = 0; x < data->width; x++) {
-        //     printf("%4d", cumulativeSteps[y][x]);
-        // }
-
-        // printf("\n");
-
         free(cumulativeSteps[y]);
     }
 
@@ -196,7 +190,7 @@ struct ElevationData *getElevationData() {
                 
                 if (elevation == 'S') {
                     data->start = (struct Location){ x, y, 0 };
-                    data->values[y][x] = 'z';
+                    data->values[y][x] = 'a';
                 } else if (elevation == 'E') {
                     data->end = (struct Location){ x, y, 0 };
                     data->values[y][x] = 'z';
