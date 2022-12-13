@@ -139,23 +139,21 @@ enum ComparisonResult compare(struct ListItem left, struct ListItem right) {
             return SAME;
         }
     } else if (left.type == LIST && right.type == LIST) {
-        int leftIndex = 0;
-        int rightIndex = 0;
+        int index = 0;
 
-        while (leftIndex < left.itemCount && rightIndex < right.itemCount) {
-            enum ComparisonResult result = compare(left.list[leftIndex], right.list[rightIndex]);
+        while (index < left.itemCount && index < right.itemCount) {
+            enum ComparisonResult result = compare(left.list[index], right.list[index]);
 
             if (result == SAME) {
-                ++leftIndex;
-                ++rightIndex;
+                ++index;
             } else {
                 return result;
             }
         }
 
-        if (leftIndex == left.itemCount && rightIndex < right.itemCount) {
+        if (index == left.itemCount && index < right.itemCount) {
             return LEFT;
-        } else if (rightIndex == right.itemCount && leftIndex < left.itemCount) {
+        } else if (index == right.itemCount && index < left.itemCount) {
             return RIGHT;
         } else {
             return SAME;
