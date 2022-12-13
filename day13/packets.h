@@ -24,19 +24,19 @@ enum ComparisonResult {
     SAME
 };
 
-int digitCount(int number) {
+int numberLength(int number) {
     if (number == 0) {
         return 1;
     }
 
-    return (int)floor(log10((double)number)) + 1;
+    return (int)floor(log10((double)abs(number))) + (number < 0 ? 2 : 1);
 }
 
 struct ListItem readValue(char *packet, int *valueLength) {
     struct ListItem value = { VALUE, NULL, 0, 0, false };
     sscanf(packet, "%d", &value.value);
 
-    *valueLength = digitCount(value.value);
+    *valueLength = numberLength(value.value);
 
     return value;
 }
