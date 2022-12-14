@@ -95,7 +95,7 @@ void clear(struct LocationQueue *queue) {
     }    
 }
 
-int fewestSteps(struct ElevationData *data, struct Location start) {
+int fewestSteps(struct ElevationData *data, struct Location start, struct Location *ends, int endCount, bool up) {
     int **cumulativeSteps = (int **)malloc(data->height * sizeof(int *));
 
     for (int y = 0; y < data->height; y++) {
@@ -111,14 +111,27 @@ int fewestSteps(struct ElevationData *data, struct Location start) {
     int xDeltas[] = {-1, 0, 1, 0};
     int yDeltas[] = {0, 1, 0, -1};
 
+    int endX;
+    int endY;
+
     enqueue(queue, start);
 
     cumulativeSteps[start.y][start.x] = 0;
 
     while (queue->size) {
         struct Location location = dequeue(queue);
+        bool endFound = false;
 
-        if (equal(location, data->end)) {
+        for (int i = 0; !endFound && i < endCount; i++) {
+            if (equal(location, ends[i])) {
+                endX = ends[i].x;
+                endY = ends[i].y;
+
+                endFound = true;
+            }
+        }
+
+        if (endFound) {
             break;
         }
 
@@ -130,7 +143,18 @@ int fewestSteps(struct ElevationData *data, struct Location start) {
                 continue;
             }
 
-            if (data->values[y][x] - data->values[location.y][location.x] <= 1) {
+            char currentElevation;
+            char nextElevation;
+
+            if (up) {
+                currentElevation = data->values[y][x];
+                nextElevation = data->values[location.y][location.x];
+            } else {
+                currentElevation = data->values[location.y][location.x];
+                nextElevation = data->values[y][x];
+            }
+
+            if (currentElevation - nextElevation <= 1) {
                 int steps = cumulativeSteps[location.y][location.x] + 1;
 
                 if (cumulativeSteps[y][x] > steps) {
@@ -142,7 +166,7 @@ int fewestSteps(struct ElevationData *data, struct Location start) {
         }
     }
 
-    int steps = cumulativeSteps[data->end.y][data->end.x];
+    int steps = cumulativeSteps[endY][endX];
 
     for (int y = 0; y < data->height; y++) {
         free(cumulativeSteps[y]);

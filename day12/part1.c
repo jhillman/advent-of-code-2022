@@ -6,7 +6,7 @@ int main() {
     struct ElevationData *data = getElevationData();
 
     if (data) {
-        int steps = fewestSteps(data, data->start);
+        int steps = fewestSteps(data, data->start, &data->end, 1, true);
 
         freeElevationData(data);
 

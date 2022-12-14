@@ -6,23 +6,31 @@ int main() {
     struct ElevationData *data = getElevationData();
 
     if (data) {
-        int pathSteps = MAX_STEPS;
+        struct Location *starts = NULL;
+        int startCount = 0;
 
         for (int y = 0; y < data->height; y++) {
             for (int x = 0; x < data->width; x++) {
                 if (data->values[y][x] == 'a') {
-                    int steps = fewestSteps(data, (struct Location){ x, y, 0 });
+                    ++startCount;
 
-                    if (steps < pathSteps) {
-                        pathSteps = steps;
+                    if (starts) {
+                        starts = (struct Location *)realloc(starts, (startCount + 1) * sizeof(struct Location));
+                    } else {
+                        starts = (struct Location *)malloc((startCount + 1) * sizeof(struct Location));
                     }
+
+                    starts[startCount++] = (struct Location){ x, y, 0 };
                 }
             }
         }
 
+        int steps = fewestSteps(data, data->end, starts, startCount, false);
+
+        free(starts);
         freeElevationData(data);
 
-        printf("%d", pathSteps);
+        printf("%d", steps);
     }
 
     return 0;
