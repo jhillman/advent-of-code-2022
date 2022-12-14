@@ -105,13 +105,7 @@ struct ListItem readList(char *packet, int *listLength) {
 }
 
 struct ListItem makeList(int value) {
-    struct ListItem list = { 
-        LIST, 
-        (struct ListItem *)malloc(sizeof(struct ListItem)), 
-        1, 
-        0 
-    };    
-
+    struct ListItem list = { LIST, (struct ListItem *)malloc(sizeof(struct ListItem)), 1, 0 };
     *list.list = (struct ListItem){ VALUE, NULL, 0, value, false };
 
     return list;
