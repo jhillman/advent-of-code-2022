@@ -16,6 +16,7 @@ struct Beacon {
 };
 
 struct Sensor {
+    int i;
     int x;
     int y;
     struct Beacon beacon;
