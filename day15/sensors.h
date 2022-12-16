@@ -16,7 +16,6 @@ struct Beacon {
 };
 
 struct Sensor {
-    int index;
     int x;
     int y;
     struct Beacon beacon;
@@ -66,8 +65,6 @@ struct ScanData *getScanData() {
 
         for (int i = 0; i < data->sensorCount; i++) {
             fgets(line, sizeof(line), inputFile);
-
-            data->sensors[i].index = i;
 
             sscanf(line, "Sensor at x=%d, y=%d: closest beacon is at x=%d, y=%d", 
                 &data->sensors[i].x, &data->sensors[i].y, &data->sensors[i].beacon.x, &data->sensors[i].beacon.y);
