@@ -16,7 +16,7 @@ int main() {
         while (cavern->rockCount < targetRockCount) {
             dropRocks(cavern, 1);
 
-            struct CavernState cavernState = { cavern->top, cavern->rockCount, cavern->gustIndex };
+            struct CavernState cavernState = { cavern->top, cavern->rockCount, cavern->rockType, cavern->gustIndex };
 
             for (int i = cavern->rock.bottom; i <= cavern->top; i++) {
                 for (int j = 0; j < CAVERN_WIDTH; j++) {

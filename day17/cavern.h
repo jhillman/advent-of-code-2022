@@ -217,12 +217,17 @@ bool tryMoveDown(struct Rock *rock, struct Cavern *cavern) {
 struct CavernState {
     long cavernTop;
     long rockCount;
+    enum RockType rockType;
     int gustIndex;
     int relativeHeights[CAVERN_WIDTH];
 };
 
 int compareStates(struct CavernState stateOne, struct CavernState stateTwo) {
-    int result = stateOne.gustIndex - stateTwo.gustIndex;
+    int result = stateOne.rockType - stateTwo.rockType;
+
+    if (result == 0) {
+        result = stateOne.gustIndex - stateTwo.gustIndex;
+    }
 
     for (int i = 0; result == 0 && i < CAVERN_WIDTH; i++) {
         result = stateOne.relativeHeights[i] - stateTwo.relativeHeights[i];
