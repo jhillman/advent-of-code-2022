@@ -1,59 +1,59 @@
 /* Day 17, part 1 = 1602881844347 */
 
-#include "tunnel.h"
+#include "cavern.h"
 
 int main() {
-    struct Tunnel *tunnel = getTunnel();
+    struct Cavern *cavern = getCavern();
 
-    if (tunnel) {
+    if (cavern) {
         long targetRockCount = 1000000000000;
-        int tunnelStateCapacity = 1000;
-        struct TunnelState *tunnelStates = (struct TunnelState *)malloc(tunnelStateCapacity * sizeof(struct TunnelState));
-        int tunnelStateCount = 0;
-        int tunnelStateIndex;
-        int maxTops[TUNNEL_WIDTH] = { 0 };
+        int cavernStateCapacity = 1000;
+        struct CavernState *cavernStates = (struct CavernState *)malloc(cavernStateCapacity * sizeof(struct CavernState));
+        int cavernStateCount = 0;
+        int cavernStateIndex;
+        int maxTops[CAVERN_WIDTH] = { 0 };
 
-        while (tunnel->rockCount < targetRockCount) {
-            dropRocks(tunnel, 1);
+        while (cavern->rockCount < targetRockCount) {
+            dropRocks(cavern, 1);
 
-            struct TunnelState tunnelState = { tunnel->top, tunnel->rockCount, tunnel->rockType, tunnel->gustIndex };
+            struct CavernState cavernState = { cavern->top, cavern->rockCount, cavern->gustIndex };
 
-            for (int i = tunnel->rock.bottom; i <= tunnel->top; i++) {
-                for (int j = 0; j < TUNNEL_WIDTH; j++) {
-                    if (tunnel->tunnel[i] & (1 << (TUNNEL_WIDTH - j - 1))) {
+            for (int i = cavern->rock.bottom; i <= cavern->top; i++) {
+                for (int j = 0; j < CAVERN_WIDTH; j++) {
+                    if (cavern->cavern[i] & (1 << (CAVERN_WIDTH - j - 1))) {
                         maxTops[j] = i + 1;
                     }
                 }
             }
 
-            for (int i = 0; i < TUNNEL_WIDTH; i++) {
-                tunnelState.relativeHeights[i] = maxTops[i] - *maxTops;
+            for (int i = 0; i < CAVERN_WIDTH; i++) {
+                cavernState.relativeHeights[i] = maxTops[i] - *maxTops;
             }
 
-            if ((tunnelStateIndex = binarySearchStates(tunnelState, tunnelStates, 0, tunnelStateCount - 1)) != -1) {
-                long patternHeight = tunnel->top - tunnelStates[tunnelStateIndex].tunnelTop;
-                long patternRockCount = tunnel->rockCount - tunnelStates[tunnelStateIndex].rockCount;
-                long patternCycles = (targetRockCount - tunnelStates[tunnelStateIndex].rockCount) / patternRockCount;
-                long remainingRocks = (targetRockCount - tunnelStates[tunnelStateIndex].rockCount) - (patternCycles * patternRockCount);
+            if ((cavernStateIndex = binarySearchStates(cavernState, cavernStates, 0, cavernStateCount - 1)) != -1) {
+                long patternHeight = cavern->top - cavernStates[cavernStateIndex].cavernTop;
+                long patternRockCount = cavern->rockCount - cavernStates[cavernStateIndex].rockCount;
+                long patternCycles = (targetRockCount - cavernStates[cavernStateIndex].rockCount) / patternRockCount;
+                long remainingRocks = (targetRockCount - cavernStates[cavernStateIndex].rockCount) - (patternCycles * patternRockCount);
 
-                dropRocks(tunnel, remainingRocks);
+                dropRocks(cavern, remainingRocks);
 
-                printf("%ld", tunnel->top + ((patternCycles - 1) * patternHeight));
+                printf("%ld", cavern->top + ((patternCycles - 1) * patternHeight));
 
-                tunnel->rockCount = targetRockCount;
+                cavern->rockCount = targetRockCount;
             } else {
-                tunnelStates[tunnelStateCount++] = tunnelState;
-                qsort(tunnelStates, tunnelStateCount, sizeof(struct TunnelState), compare);
+                cavernStates[cavernStateCount++] = cavernState;
+                qsort(cavernStates, cavernStateCount, sizeof(struct CavernState), compare);
             }
 
-            if (tunnelStateCount == tunnelStateCapacity) {
-                tunnelStateCapacity += 1000;
+            if (cavernStateCount == cavernStateCapacity) {
+                cavernStateCapacity += 1000;
 
-                tunnelStates = (struct TunnelState *)realloc(tunnelStates, tunnelStateCapacity * sizeof(struct TunnelState));
+                cavernStates = (struct CavernState *)realloc(cavernStates, cavernStateCapacity * sizeof(struct CavernState));
             }
         }
 
-        freeTunnel(tunnel);
+        freeCavern(cavern);
     }
 
     return 0;

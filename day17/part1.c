@@ -1,16 +1,16 @@
 /* Day 17, part 1 = 3206 */
 
-#include "tunnel.h"
+#include "cavern.h"
 
 int main() {
-    struct Tunnel *tunnel = getTunnel();
+    struct Cavern *cavern = getCavern();
 
-    if (tunnel) {
-        dropRocks(tunnel, 2022);
+    if (cavern) {
+        dropRocks(cavern, 2022);
 
-        printf("%ld", tunnel->top);
+        printf("%ld", cavern->top);
 
-        freeTunnel(tunnel);
+        freeCavern(cavern);
     }
 
     return 0;
