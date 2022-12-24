@@ -11,24 +11,11 @@ int main() {
         struct CavernState *cavernStates = (struct CavernState *)malloc(cavernStateCapacity * sizeof(struct CavernState));
         int cavernStateCount = 0;
         int cavernStateIndex;
-        int maxTops[CAVERN_WIDTH] = { 0 };
 
         while (cavern->rockCount < targetRockCount) {
             dropRocks(cavern, 1);
 
-            struct CavernState cavernState = { cavern->top, cavern->rockCount, cavern->rockType, cavern->gustIndex };
-
-            for (int i = cavern->rock.bottom; i <= cavern->top; i++) {
-                for (int j = 0; j < CAVERN_WIDTH; j++) {
-                    if (cavern->cavern[i] & (1 << (CAVERN_WIDTH - j - 1))) {
-                        maxTops[j] = i + 1;
-                    }
-                }
-            }
-
-            for (int i = 0; i < CAVERN_WIDTH; i++) {
-                cavernState.relativeHeights[i] = maxTops[i] - *maxTops;
-            }
+            struct CavernState cavernState = { cavern->top, cavern->rockCount, cavern->rockType, cavern->gustIndex, cavern->cavern[cavern->top] };
 
             if ((cavernStateIndex = binarySearchStates(cavernState, cavernStates, 0, cavernStateCount - 1)) != -1) {
                 long patternHeight = cavern->top - cavernStates[cavernStateIndex].cavernTop;

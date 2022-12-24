@@ -219,7 +219,7 @@ struct CavernState {
     long rockCount;
     enum RockType rockType;
     int gustIndex;
-    int relativeHeights[CAVERN_WIDTH];
+    int row;
 };
 
 int compareStates(struct CavernState stateOne, struct CavernState stateTwo) {
@@ -229,8 +229,8 @@ int compareStates(struct CavernState stateOne, struct CavernState stateTwo) {
         result = stateOne.gustIndex - stateTwo.gustIndex;
     }
 
-    for (int i = 0; result == 0 && i < CAVERN_WIDTH; i++) {
-        result = stateOne.relativeHeights[i] - stateTwo.relativeHeights[i];
+    if (result == 0) {
+        result = stateOne.row - stateTwo.row;
     }
 
     return result;
